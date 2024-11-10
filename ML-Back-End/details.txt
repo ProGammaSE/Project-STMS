@@ -1,0 +1,16 @@
+Software & Hardware components
+1 = Computers/laptops
+2 = Projectors
+3 = Printers/Scanners
+4 = Network routers
+5 = Network switches
+6 = Security cameras
+7 = Audio/Video systems
+8 = Photocopy machines
+9 = Learning management system (LMS)
+10 = Operating systems (OS)
+11 = Antivirus/Virus guards or firewall
+12 = Communication tools (Email/Teams/Zoom)
+13 = Library management system
+14 = Database or storage
+15 = Backup solutions (local or cloud)
