@@ -9,5 +9,5 @@ public class GeneralResponse {
 
     private int response;
     private String message;
-    private Users user;
+    private Object data;
 }

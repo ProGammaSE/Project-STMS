@@ -1,9 +1,8 @@
 package com.example.javabackend.Model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -15,8 +14,11 @@ public class Users {
     @Column(name = "user_id")
     private int userId;
 
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "user_role")
+    private int userRole;
 
     @Column(name = "user_username")
     private String userUsername;

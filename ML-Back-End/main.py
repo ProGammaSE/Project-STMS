@@ -8,11 +8,6 @@ import joblib
 from sklearn import naive_bayes
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-import jsonpickle
-import mysql.connector
-import cv2
-import numpy as np
-import math
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -39,17 +34,17 @@ def train_model():
     try:
         # Load dataset (csv file)
         print("attempting to read the CSV file data (dataset)")
-        csv_data = pd.read_csv("dataset.csv", header=None, names=column_names)
+        csv_data = pd.read_csv("sample_dataset.csv", header=None, names=column_names)
         print("CSV reading successful")
 
         # Split dataset
         print("Fitting data into the Naive Bayes model")
         feature_columns = ['month', 'week']
-        X = csv_data[feature_columns]
-        Y = csv_data['components']
+        x = csv_data[feature_columns]
+        y = csv_data['components']
 
         # # 70% training and 30% test
-        x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=1)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=1)
 
         # # Fit the training datasets into the algorithm
         naive = naive_bayes.MultinomialNB()
@@ -116,7 +111,7 @@ def predict_component():
         obj = {
             "status": 400,
             "description": "Component predicted successfully",
-            "prediction": int(prediction)
+            "prediction": 0
         }
         print(e)
         abort(400)
@@ -124,7 +119,3 @@ def predict_component():
 
 
 app.run(port=5001, debug=True)
-
-
-https://5001/model/train
-https://5001/predict/component
