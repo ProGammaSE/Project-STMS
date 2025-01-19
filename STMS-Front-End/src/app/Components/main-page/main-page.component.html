@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="row">
+      <div class="col">
+  
+      </div>
+      <div class="col-8">
+  
+        &nbsp;
+        <div *ngIf="this.loadingBox" style="text-align: center">
+          <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+            &nbsp;
+            <span role="status">Loading...</span>
+          </button>
+        </div>
+  
+        <div class="card" style="margin-top: 5%">
+  
+          <div *ngIf="this.alertStatus" [ngClass]="this.alertClass" style="margin: 2%;" role="alert">
+            {{this.alertText}}
+          </div>
+  
+          <div class="container text-center">
+            &nbsp;
+            <div class="row">
+               
+                <div class="col">
+                    <select class="form-select" aria-label="Default select example" [(ngModel)]="this.predictRequest.month" name="predictRequest.month">
+                        <option value="0" selected>Select Month</option>
+                        <option value="1">January - 01</option>
+                        <option value="2">February - 02</option>
+                        <option value="3">March - 03</option>
+                        <option value="4">April - 04</option>
+                        <option value="5">May - 05</option>
+                        <option value="6">June - 06</option>
+                        <option value="7">July - 07</option>
+                        <option value="8">August - 08</option>
+                        <option value="9">September - 09</option>
+                        <option value="10">Octobar - 10</option>
+                        <option value="11">November - 11</option>
+                        <option value="12">December - 12</option>
+                      </select>
+                  </div>
+
+                  <div class="col">
+                    <select class="form-select" aria-label="Default select example" [(ngModel)]="this.predictRequest.week" name="predictRequest.week">
+                        <option value="0" selected>Select Week</option>
+                        <option value="1">Week 01</option>
+                        <option value="2">Week 02</option>
+                        <option value="3">Week 03</option>
+                        <option value="4">Week 04</option>
+                        <option value="5">Week 05</option>
+                      </select>
+                  </div>
+            </div>
+
+            <div *ngIf="this.resultBox" style="text-align: left;">
+
+              &nbsp;
+              <div [ngClass]="this.resultboxColor" role="alert">
+                <h5>PREDICTION RESULTS</h5>
+                <p>this.</p>
+              </div>
+            </div>
+
+            <div style="margin: 2%;">
+                <button type="submit" class="btn btn-warning">
+                    Reset
+                    &nbsp;
+                    <i class="bi bi-x-circle"></i>
+                </button>
+                
+                &nbsp;
+                <button type="submit" class="btn btn-success" (click)="predictComponent()">
+                    Predict
+                    &nbsp;
+                    <i class="bi bi-arrow-right-circle"></i>
+                </button>
+
+            </div>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="col">
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  

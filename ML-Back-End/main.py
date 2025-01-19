@@ -1,4 +1,4 @@
-# author:
+# author: Supun
 import flask
 from flask import request
 from flask_restful import abort
@@ -91,6 +91,57 @@ def predict_component():
         month = int(request.json['month'])
         week = int(request.json['week'])
 
+        # print(month)
+        # print(week)
+        # input_array = [month, week]
+        # prediction = naive_joblib.predict([input_array])[0]
+        # print("Prediction: ", prediction)
+        #
+        # predict_array = [{"prediction": naive_joblib.predict([month, week])[0], "accuracy": "100%"}]
+        #
+        # # check before week predict
+        # # If week 01 then check the last week of the previous month
+        # if week == 1:
+        #     # If the selected month is January, then check the December last week prediction
+        #     if month == 1:
+        #         predict_array.append({"prediction": naive_joblib.predict([12, 5])[0], "accuracy": "25%"})
+        #     else:
+        #         predict_array.append({"prediction": naive_joblib.predict([(month - 1), 5])[0], "accuracy": "25%"})
+        #
+        # elif week == 2:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 1])[0], "accuracy": "25%"})
+        #
+        # elif week == 3:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 2])[0], "accuracy": "25%"})
+        #
+        # elif week == 4:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 3])[0], "accuracy": "25%"})
+        #
+        # else:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 4])[0], "accuracy": "25%"})
+        #
+        # # Check next week
+        # if week == 5:
+        #     # If the selected month is January, then check the December last week prediction
+        #     if month == 12:
+        #         predict_array.append({"prediction": naive_joblib.predict([1, 1])[0], "accuracy": "25%"})
+        #     else:
+        #         predict_array.append({"prediction": naive_joblib.predict([(month + 1), 5])[0], "accuracy": "25%"})
+        #
+        # elif week == 4:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 5])[0], "accuracy": "25%"})
+        #
+        # elif week == 3:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 4])[0], "accuracy": "25%"})
+        #
+        # elif week == 2:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 3])[0], "accuracy": "25%"})
+        #
+        # else:
+        #     predict_array.append({"prediction": naive_joblib.predict([month, 2])[0], "accuracy": "25%"})
+        #
+        # print(predict_array)
+
         # Creating an array using given inputs
         input_array = [month, week]
         print(input_array)
@@ -108,12 +159,13 @@ def predict_component():
         print(obj)
 
     except Exception as e:
+        print(e)
         obj = {
             "status": 400,
             "description": "Component predicted successfully",
             "prediction": 0
         }
-        print(e)
+
         abort(400)
     return obj
 

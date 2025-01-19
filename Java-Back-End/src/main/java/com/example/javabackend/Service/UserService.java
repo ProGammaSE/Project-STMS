@@ -21,19 +21,24 @@ public class UserService {
         Users dbUser;
 
         // checking whether the mandatory data are available
-        if (user.getFullName().isEmpty() || user.getUserUsername().isEmpty() || user.getUserPassword().isEmpty()) {
-            generalResponse.setResponse(400);
-            generalResponse.setMessage("Mandatory data are not available");
-        }
-        else {
+        if (!user.getFullName().isEmpty() && !user.getUserUsername().isEmpty() && !user.getUserPassword().isEmpty()) {
             try {
-                // creating user in the database
-                dbUser = userRepository.save(user);
-                System.out.println("User created successfully");
-                generalResponse.setResponse(200);
-                generalResponse.setData(dbUser);
-                generalResponse.setMessage("User created successfully");
+                // Checking whether the username is already available in the system
+                Users validateUsername = userRepository.findByUserUsername(user.getUserUsername());
 
+                if (validateUsername != null) {
+                    System.out.println("User already exists");
+                    generalResponse.setResponse(400);
+                    generalResponse.setMessage("User already exists");
+                }
+                else {
+                    // creating user in the database
+                    dbUser = userRepository.save(user);
+                    System.out.println("User created successfully");
+                    generalResponse.setResponse(200);
+                    generalResponse.setData(dbUser);
+                    generalResponse.setMessage("User created successfully");
+                }
             } catch (Exception ex) {
                 // error when trying to save in the database
                 System.out.println("User creation failed");
@@ -41,6 +46,11 @@ public class UserService {
                 generalResponse.setMessage("User creation failed");
                 System.out.println(ex.getMessage());
             }
+        }
+        else {
+            System.out.println("Mandatory data are not available");
+            generalResponse.setResponse(400);
+            generalResponse.setMessage("Mandatory data are not available");
         }
         return generalResponse;
     }
