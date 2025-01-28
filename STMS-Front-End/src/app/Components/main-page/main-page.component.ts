@@ -56,7 +56,7 @@ export class MainPageComponent {
         this.generalResponse = result
 
         if (this.generalResponse.response == 200) {
-          // Showing an error message for 3 seconds
+          // Showing an status message for 3 seconds
           this.loadingBox = false;
           this.alertStatus = true
           this.alertClass = "alert alert-success"
