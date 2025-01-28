@@ -27,18 +27,72 @@ export class MainPageComponent {
 
   constructor (private predictService: PredictService) {}
 
+  // Function to predict the component by sending the month and the week
   predictComponent() {
-    this.predictService.predictComponent(this.predictRequest).pipe(
-      timeout(10000),
-      catchError(err => {
-        return err;
+    this.resultBox = false;
+    this.loadingBox = true;
+    this.alertStatus = false;
+
+    if (this.predictRequest.month == 0 || this.predictRequest.week == 0) {
+      // Showing an error message for 5 seconds
+      this.loadingBox = false;
+      this.alertStatus = true
+      this.alertClass = "alert alert-danger"
+      this.alertText = "Please select a month and a week!"
+
+      setTimeout(() => {
+        this.loadingBox = false;
+        this.resultBox = false;
+        this.alertStatus = false;
+      }, 3000);
+    }
+    else {
+      this.predictService.predictComponent(this.predictRequest).pipe(
+        timeout(10000),
+        catchError(err => {
+          return err;
+        })
+      ).subscribe ((result: any) => {
+        this.generalResponse = result
+
+        if (this.generalResponse.response == 200) {
+          // Showing an error message for 3 seconds
+          this.loadingBox = false;
+          this.alertStatus = true
+          this.alertClass = "alert alert-success"
+          this.alertText = this.generalResponse.message
+
+          this.resultBox = true
+          this.predictionResult = result.prediction[0]
+          console.log(result)
+          console.log(this.predictionResult)
+
+          setTimeout(() => {
+            this.alertStatus = false
+            this.loadingBox = false;
+          }, 3000);
+        }
+        else {
+          // Showing an error message for 5 seconds
+          this.loadingBox = false;
+          this.alertStatus = true
+          this.alertClass = "alert alert-danger"
+          this.alertText = this.generalResponse.message
+
+          setTimeout(() => {
+            this.loadingBox = false;
+            this.resultBox = false
+          }, 3000);
+        }
       })
-    ).subscribe ((result: any) => {
-      this.resultBox = true
-      this.predictionResult = result.prediction[0]
-      console.log(result)
-      console.log(this.predictionResult)
-    })
+    }
+  }
+
+  clickOnReset() {
+    this.predictRequest = new PredictRequest();
+    this.loadingBox = false;
+    this.resultBox = false;
+    this.alertStatus = false;
   }
   
 }

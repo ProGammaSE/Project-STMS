@@ -40,13 +40,6 @@ export class LoginPageComponent {
       setTimeout(() => {
         this.alertStatus = false
         this.loadingBox = false;
-
-        // saving the user if in browser local memory
-        // console.log("user id : " + result['user']['userId'])
-        // localStorage.setItem('userId', result['user']['userId']);
-
-        // navigate to the next page
-        // this.router.navigate(['/navigation/template'])
       }, 5000);
 
     }
@@ -114,6 +107,6 @@ export class LoginPageComponent {
   // Then navigates to the "register" page
   clickOnNotAMember() {
     // Navigate to the next page
-    this.router.navigate(['/login'])
+    this.router.navigate(['/register'])
   }
 }
