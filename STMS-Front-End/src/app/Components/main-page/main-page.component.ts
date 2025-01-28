@@ -53,14 +53,12 @@ export class MainPageComponent {
           return err;
         })
       ).subscribe ((result: any) => {
-        this.generalResponse = result
-
-        if (this.generalResponse.response == 200) {
+        if (result.status == 200) {
           // Showing an status message for 3 seconds
           this.loadingBox = false;
           this.alertStatus = true
           this.alertClass = "alert alert-success"
-          this.alertText = this.generalResponse.message
+          this.alertText = result.description
 
           this.resultBox = true
           this.predictionResult = result.prediction[0]
@@ -77,7 +75,7 @@ export class MainPageComponent {
           this.loadingBox = false;
           this.alertStatus = true
           this.alertClass = "alert alert-danger"
-          this.alertText = this.generalResponse.message
+          this.alertText = result.description
 
           setTimeout(() => {
             this.loadingBox = false;
