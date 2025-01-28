@@ -1,1 +1,107 @@
-<p>ticketing-page works!</p>
+<div class="container">
+    <div class="row">
+      <div class="col">
+  
+      </div>
+      <div class="col-8">
+  
+        &nbsp;
+        <div *ngIf="this.loadingBox" style="text-align: center">
+          <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+            &nbsp;
+            <span role="status">Loading...</span>
+          </button>
+        </div>
+  
+        <div class="card" style="margin-top: 5%">
+  
+          <div *ngIf="this.alertStatus" [ngClass]="this.alertClass" style="margin: 2%;" role="alert">
+            {{this.alertText}}
+          </div>
+  
+          <div class="card-body">
+            <form class="row g-3">
+              <legend style="color: rgb(0, 71, 204);"><b>Create Tickets</b></legend>
+  
+              <div class="col-md-12">
+                <label for="emailAddress" class="form-label">Component</label>
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="this.ticketing.ticketComponent" name="ticketWeek">
+                    <option value="0" selected>Select Component</option>
+                    <option value="1">Computers/laptops</option>
+                    <option value="2">Projectors</option>
+                    <option value="3">Printers/Scanners</option>
+                    <option value="4">Network routers</option>
+                    <option value="5">Network switches</option>
+                    <option value="6">Security cameras</option>
+                    <option value="7">Audio/Video systems</option>
+                    <option value="8">Photocopy machines</option>
+                    <option value="9">Learning management system (LMS)</option>
+                    <option value="10">Operating systems (OS)</option>
+                    <option value="11">Antivirus/Virus guards or firewall</option>
+                    <option value="12">Communication tools (Email/Teams/Zoom)</option>
+                    <option value="13">Library management system</option>
+                    <option value="14">Database or storage</option>
+                    <option value="15">Backup solutions (local or cloud)</option>
+                  </select>
+              </div>
+
+              <div class="col-md-12">
+                <label for="emailAddress" class="form-label">Issue Title</label>
+                <input type="email" class="form-control" id="emailAddress" name="ticketTitle" [(ngModel)]="this.ticketing.ticketTitle">
+              </div>
+
+              <div class="col-md-12">
+                <label for="emailAddress" class="form-label">Issue Description</label>
+                <textarea type="email" class="form-control" id="emailAddress" name="fullName" [(ngModel)]="this.ticketing.ticketDescription"></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label for="emailAddress" class="form-label">Issue Month</label>
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="this.ticketing.ticketMonth" name="predictRequest.month">
+                    <option value="0" selected>Select Month</option>
+                    <option value="1">January - 01</option>
+                    <option value="2">February - 02</option>
+                    <option value="3">March - 03</option>
+                    <option value="4">April - 04</option>
+                    <option value="5">May - 05</option>
+                    <option value="6">June - 06</option>
+                    <option value="7">July - 07</option>
+                    <option value="8">August - 08</option>
+                    <option value="9">September - 09</option>
+                    <option value="10">Octobar - 10</option>
+                    <option value="11">November - 11</option>
+                    <option value="12">December - 12</option>
+                  </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="emailAddress" class="form-label">Issue Week</label>
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="this.ticketing.ticketWeek" name="ticketWeek">
+                    <option value="0" selected>Select Week</option>
+                    <option value="1">Week 01</option>
+                    <option value="2">Week 02</option>
+                    <option value="3">Week 03</option>
+                    <option value="4">Week 04</option>
+                    <option value="5">Week 05</option>
+                  </select>
+              </div>
+  
+              <div class="col-12">
+                <button type="submit" class="btn btn-success" (click)=" createTicket()">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="col">
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  

@@ -4,6 +4,7 @@ import com.example.javabackend.Model.GeneralResponse;
 import com.example.javabackend.Model.Users;
 import com.example.javabackend.Service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +26,11 @@ public class UserController {
     @PostMapping(value = "/user/login")
     public GeneralResponse loginUser(@RequestBody Users user) {
         return userService.loginUser(user);
+    }
+
+    // Function to edit (update) user details
+    @PutMapping(value = "/user/edit")
+    public GeneralResponse editUser(@RequestBody Users user) {
+        return userService.editUser(user);
     }
 }

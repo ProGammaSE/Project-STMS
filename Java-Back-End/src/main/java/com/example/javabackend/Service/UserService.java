@@ -95,4 +95,43 @@ public class UserService {
         }
         return generalResponse;
     }
+
+    // Function to edit user details in the system
+    public GeneralResponse editUser(Users user) {
+        System.out.println("***** editUser function is starting *****");
+        GeneralResponse generalResponse = new GeneralResponse();
+
+        // Check whether the user ID is available in the request from the front-end
+        if (user.getUserId() != 0) {
+            System.out.println("User ID is available, Therefore checking the Database availability");
+
+            try {
+                Users dbUser = userRepository.findByUserId(user.getUserId());
+
+                if (dbUser != null) {
+                    System.out.println("User ID is available in the database, Therefore attempting to edit details");
+                    userRepository.save(user);
+
+                    generalResponse.setResponse(200);
+                    generalResponse.setMessage("User updated successfully");
+                    generalResponse.setData(user);
+                }
+                else {
+                    System.out.println("User ID is not available in the database");
+                    generalResponse.setResponse(400);
+                    generalResponse.setMessage("User not found");
+                }
+            } catch (Exception ex) {
+                System.out.println("An error occurred while editing the suer");
+                generalResponse.setResponse(400);
+                generalResponse.setMessage("An error occurred while editing the suer");
+            }
+        }
+        else {
+            System.out.println("User ID is not available in the request");
+            generalResponse.setResponse(400);
+            generalResponse.setMessage("User not found");
+        }
+        return generalResponse;
+    }
 }

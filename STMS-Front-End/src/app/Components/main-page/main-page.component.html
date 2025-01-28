@@ -59,7 +59,11 @@
               &nbsp;
               <div [ngClass]="this.resultboxColor" role="alert">
                 <h5>PREDICTION RESULTS</h5>
-                <p>this.</p>
+                <ul style="list-style-type: square;">
+                  <li>Prediction ID: {{ predictionResult['prediction'] }}</li>
+                  <li>Description: {{ predictionResult['component'] }}</li>
+                  <li>Accuracy: {{ predictionResult['accuracy'] }}</li>
+              </ul>
               </div>
             </div>
 

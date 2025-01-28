@@ -20,7 +20,6 @@ export class MainPageComponent {
   alertClass: string = "";
   alertText: string = "";
   predictRequest: PredictRequest = new PredictRequest()
-  // prediction: Prediction = new Prediction;
   generalResponse: GeneralResponse = new GeneralResponse;
   predictionResult: any = []
   resultBox: boolean = false;
@@ -36,7 +35,9 @@ export class MainPageComponent {
       })
     ).subscribe ((result: any) => {
       this.resultBox = true
+      this.predictionResult = result.prediction[0]
       console.log(result)
+      console.log(this.predictionResult)
     })
   }
   
