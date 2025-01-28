@@ -22,6 +22,7 @@ export class MainPageComponent {
   predictRequest: PredictRequest = new PredictRequest()
   generalResponse: GeneralResponse = new GeneralResponse;
   predictionResult: any = []
+  predictionResult2: any = []
   resultBox: boolean = false;
   resultboxColor: string = "alert alert-success";
 
@@ -66,14 +67,14 @@ export class MainPageComponent {
           console.log(this.predictionResult)
 
           setTimeout(() => {
-            this.alertStatus = false
+            this.alertStatus = false;
             this.loadingBox = false;
           }, 3000);
         }
         else {
           // Showing an error message for 5 seconds
           this.loadingBox = false;
-          this.alertStatus = true
+          this.alertStatus = true;
           this.alertClass = "alert alert-danger"
           this.alertText = result.description
 

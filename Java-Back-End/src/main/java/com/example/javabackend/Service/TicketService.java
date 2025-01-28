@@ -5,6 +5,8 @@ import com.example.javabackend.Model.Tickets;
 import com.example.javabackend.Repository.TicketRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketService {
 
@@ -48,6 +50,43 @@ public class TicketService {
         }
         else {
 
+        }
+        return generalResponse;
+    }
+
+    // Function to get all the saved tickets from the database
+    public List<Tickets> getAllTickets() {
+        List<Tickets> tickets = ticketRepository.findAll();
+        return tickets;
+    }
+
+    // Function to edit (update) ticket details
+    public GeneralResponse updateTicket(Tickets ticket) {
+        GeneralResponse generalResponse = new GeneralResponse();
+
+        try {
+            Tickets dbTicket = ticketRepository.save(ticket);
+            generalResponse.setResponse(200);
+            generalResponse.setMessage("Ticket updated successfully");
+            generalResponse.setData(dbTicket);
+        } catch (Exception ex) {
+            generalResponse.setResponse(400);
+            generalResponse.setMessage("Something went wrong!");
+        }
+        return generalResponse;
+    }
+
+    // Function to delete a ticket from the Database
+    public GeneralResponse deleteTicket(Tickets ticket) {
+        GeneralResponse generalResponse = new GeneralResponse();
+
+        try {
+            ticketRepository.delete(ticket);
+            generalResponse.setResponse(200);
+            generalResponse.setMessage("Ticket deleted successfully");
+        } catch (Exception ex) {
+            generalResponse.setResponse(400);
+            generalResponse.setMessage("Something went wrong!");
         }
         return generalResponse;
     }
