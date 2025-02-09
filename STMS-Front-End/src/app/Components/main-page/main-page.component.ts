@@ -3,7 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import { GeneralResponse } from '../../Models/GeneralResponse';
 import { PredictService } from '../../Services/predict.service';
-import { PredictRequest } from '../../Models/predictRequest';
+import { PredictRequest } from '../../Models/PredictRequest';
 import { catchError, timeout } from 'rxjs';
 
 @Component({

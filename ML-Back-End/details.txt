@@ -13,4 +13,4 @@ Software & Hardware components
 12 = Communication tools (Email/Teams/Zoom)
 13 = Library management system
 14 = Database or storage
-15 = Backup solutions (local or cloud)
+15 = Backup solutions (local or cloud),

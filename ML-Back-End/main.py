@@ -8,6 +8,8 @@ import joblib
 from sklearn import naive_bayes
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+import csv
+import json
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -21,10 +23,57 @@ cors = CORS(app, resources={
 })
 
 
+# function to write ticket data into the dataset
+@app.route('/dataset/write', methods=['POST'])
+def dataset_write():
+    print("***** dataset_write function is starting *****")
+    row_count = 0
+
+    # Get ticket data that are user inserting from the Angular FrontEnd
+    # Get user input values
+    month = int(request.json['month'])
+    week = int(request.json['week'])
+    component = int(request.json['component'])
+
+    print(month, week, component)
+
+    if month == 0 or week == 0 or component == 0:
+        obj = {
+            "status": 400,
+            "description": "Ticket data not found!",
+            "size": 0
+        }
+
+    else:
+        # Open the CSV file in write mode to write the new ticket data
+        new_ticket_data = [month, week, component]
+        with open("sample_dataset.csv", mode="a", newline="") as file:
+            writer = csv.writer(file)
+
+            # Write the entry to the CSV file
+            writer.writerow(new_ticket_data)
+            print("New ticket data successfully written to the dataset CSV")
+
+        # Open the CSV file and count rows and return
+        with open("sample_dataset.csv", mode="r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                row_count += 1
+
+        obj = {
+            "status": 200,
+            "size": row_count,
+            "description": "Ticket added successfully!",
+        }
+
+    print(obj)
+    return obj
+
+
 # function to train the machine learning model
 # to predict the software or hardware component which is going to
 # encounter an issue in the given time stamp
-@app.route('/model/train', methods=['POST'])
+@app.route('/model/train', methods=['GET'])
 def train_model():
     print("***** train_model function is starting *****")
 
@@ -33,7 +82,7 @@ def train_model():
 
     try:
         # Load dataset (csv file)
-        print("attempting to read the CSV file data (dataset)")
+        print("attempting to read the CSV file data (sample_dataset.csv)")
         csv_data = pd.read_csv("sample_dataset.csv", header=None, names=column_names)
         print("CSV reading successful")
 
@@ -43,10 +92,10 @@ def train_model():
         x = csv_data[feature_columns]
         y = csv_data['components']
 
-        # # 70% training and 30% test
+        # 70% training and 30% test
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=1)
 
-        # # Fit the training datasets into the algorithm
+        # Fit the training datasets into the algorithm
         naive = naive_bayes.MultinomialNB()
         naive.fit(x_train.values, y_train.values)
         print("Naive Bayes model fitted")
@@ -62,6 +111,16 @@ def train_model():
         accuracy = round(accuracy_score(prediction, y_test) * 100, 2)
         print("Model Accuracy: ", accuracy, "%")
 
+        # Load the existing data from the JSON file where the accuracy is stored
+        with open('local_data.json', 'r') as file:
+            data = json.load(file)
+
+        data['accuracy'] = str(accuracy) + "%"
+
+        # Write the updated data back to the JSON file where the accuracy is stored
+        with open('local_data.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
         obj = {
             "status": 200,
             "description": "Predictive ticketing model trained successfully",
@@ -75,6 +134,7 @@ def train_model():
         print(e)
         abort(400)
 
+    print(obj)
     return obj
 
 
@@ -91,9 +151,19 @@ def predict_component():
         month = int(request.json['month'])
         week = int(request.json['week'])
 
+        # Get the prediction using the user inputs
         input_array = [month, week]
         prediction = int(naive_joblib.predict([input_array])[0])
-        predict_array = [{"prediction": prediction, "component": get_component_name(prediction), "accuracy": "99%"}]
+
+        # Get the accuracy from the local_data.json file
+        # Load the existing data from the JSON file where the accuracy is stored
+        with open('local_data.json', 'r') as file:
+            data = json.load(file)
+
+        accuracy = data['accuracy']
+        print(accuracy)
+
+        predict_array = [{"prediction": prediction, "component": get_component_name(prediction), "accuracy": accuracy}]
 
         # check before week predict
         # If week 01 then check the last week of the previous month
@@ -102,59 +172,71 @@ def predict_component():
             if month == 1:
                 input_array = [12, 5]
                 prediction = int(naive_joblib.predict([input_array])[0])
-                predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+                predict_array.append(
+                    {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
             else:
                 input_array = [(month - 1), 5]
                 prediction = int(naive_joblib.predict([input_array])[0])
-                predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+                predict_array.append(
+                    {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
             # Adding next week prediction
             input_array = [month, 2]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
         elif week == 2:
             input_array = [month, 1]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
             input_array = [month, 3]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
         elif week == 3:
             input_array = [month, 2]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
             input_array = [month, 4]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
         elif week == 4:
             input_array = [month, 3]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
             input_array = [month, 5]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
         else:
             # Adding next week prediction
             input_array = [month, 4]
             prediction = int(naive_joblib.predict([input_array])[0])
-            predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+            predict_array.append(
+                {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
             # If the selected month is January, then check the December last week prediction
             if month == 12:
                 input_array = [1, 1]
                 prediction = int(naive_joblib.predict([input_array])[0])
-                predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+                predict_array.append(
+                    {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
             else:
                 input_array = [(month + 1), 5]
                 prediction = int(naive_joblib.predict([input_array])[0])
-                predict_array.append({"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
+                predict_array.append(
+                    {"prediction": prediction, "component": get_component_name(prediction), "accuracy": "25%"})
 
         # Creating an object using prediction
         obj = {

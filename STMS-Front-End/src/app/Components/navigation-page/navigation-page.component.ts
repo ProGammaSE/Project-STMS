@@ -41,6 +41,7 @@ export class NavigationPageComponent implements OnInit {
   // Fucntiohn to handle user logout
   clickOnLogout() {
     localStorage.removeItem('user');
+    localStorage.clear
     this.router.navigate(['/login'])
   }
 }
